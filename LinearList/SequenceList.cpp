@@ -52,12 +52,26 @@ int searchElem(SqList &L, string name){
 }
 
 // 插入
-Status insert(SqList &L,int i,Book &b){
+Status insert(SqList &L,int i,Book &b){ //在第i个位置插入新元素
     if(i<1||i>L.length) return ERROR;
     if(L.length==MAXSIZE) return ERROR;
-    
+    for(int j=L.length-1;j>=i-1;j--){
+        L.elem[j+1]=L.elem[j];
+    }
+    L.elem[i-1] = b;
+    L.length++;
+    return OK;
 }
 
+// 删除
+Status dellist(SqList &L, int i){ //删除第i位的元素
+    if(i<1||i>L.length) return ERROR;
+    for(int j =i-1;j<L.length-2;j++){
+        L.elem[j] = L.elem[j+1];
+    }
+    L.length--;
+    return OK;
+}
 
 int main(){
     SqList list;
@@ -83,14 +97,49 @@ int main(){
     string testname = "英语";
     int result = searchElem(list,testname);
     if(result !=0){
-        cout << "查询到位于第"<<result<<"位" << endl;
+        cout << "查询到英语位于第"<<result<<"位" << endl;
     }
     else{
         cout << "没有查询到该内容";
     }
+    Book B2;
+    B2.id="2345";
+    B2.name = "语文";
+    B2.price = 11.2;
+    list.elem[list.length] =B2;
+    list.length++;
+    Book B3;
+    B3.id="3456";
+    B3.name = "数学";
+    B3.price = 16.2;
+    list.elem[list.length] = B3;
+    list.length++;
+
+    //第i位 插入
+    Book Bi;
+    Bi.id = "9527";
+    Bi.name = "数据结构";
+    Bi.price = 9.9;
+    Status result2 = insert(list,2,Bi);
+    if(result2 !=OK){
+        cout << "插入失败"<<endl;
+    }else{
+        cout << "插入成功"<<endl;
+    }
 
 
+    //第i位，删除
+    Status result3 = dellist(list,4);
+    if(result3 !=OK){
+        cout << "删除失败"<<endl;
+    }else{
+        cout << "删除成功"<<endl;
+    }
 
+    //打印列表
+    for(int i=0;i<list.length;i++){
+        cout<<list.elem[i].name<<endl;
+    }
 
     return 0;
 }
