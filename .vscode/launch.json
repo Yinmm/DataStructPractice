@@ -19,6 +19,9 @@
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
+                },
+                {
+                    "text": "set charset UTF-8"
                 }
             ]
         }

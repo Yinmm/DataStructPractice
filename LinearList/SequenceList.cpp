@@ -135,11 +135,14 @@ int main(){
     }else{
         cout << "删除成功"<<endl;
     }
-
+    Book *p;
     //打印列表
     for(int i=0;i<list.length;i++){
         cout<<list.elem[i].name<<endl;
+        p = list.elem+i;
+        cout<<p<<endl;
+        // cout<<p->name<<endl;
     }
 
-    return 0;
+    system("pause");
 }

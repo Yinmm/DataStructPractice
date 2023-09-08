@@ -1,5 +1,6 @@
-#include<string>
-#include<iostream>
+#include<string> 
+#include<iostream> //输出流
+#include<vector> // 动态创建数组
 using namespace std;
 
 #define OK 1
@@ -79,7 +80,7 @@ Status DelList(LinkList &L,int i){
     // 将P的指针域指向删除节点的指向域，销毁待删除的节点
     LNode* p;
     int j = 0;
-    p = L;
+    p = L; //赋值头节点
     while (p->next && j<i-1)
     {
         p=p->next;
@@ -94,13 +95,71 @@ Status DelList(LinkList &L,int i){
     
 }
 
+
+// 前插法创建单链表
+Status CreatPriorList(LinkList &L,vector<int> elemlist){ 
+    L = new LNode;
+    L->next =NULL;
+    int Length = elemlist.size();
+    for(int i=0;i<Length;i++){
+        LNode* p =new LNode;
+        p->data = elemlist[Length-1-i]; //新节点插入到头结点之后，需要倒序插入数据，越后插入的数据越在前面
+        p->next = L->next;
+        L->next = p;
+    }
+    return OK;
+}
+
+//尾插法创建单链表
+Status CreatTailList(LinkList &L,vector<int> elemlist){
+    L = new LNode; //生成头结点
+    L->next = NULL; 
+    LNode* r; //尾指针
+    r=L;
+    for(int i=0;i<elemlist.size();i++){
+        LNode *p = new LNode;
+        p->data = elemlist[i];
+        r->next = p; //尾指针的指针域指向p
+        p->next = NULL; // 因为P是最后一个,所以P的指针域设为空
+        r = p; //r指向新的尾结点;
+    }
+    return OK;
+}
+
+
+
+
+// 释放链表
+void releaseList(LinkList &L){
+        // 释放链表节点
+    LNode* current = L->next;
+    while (current) {
+        LNode* nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+    delete L;  // 释放头节点
+}
+
+// 打印链表
+void Print(LinkList &L){
+    //打印链表
+    LNode* node = L->next; //跳过头结点
+    while (node != nullptr)
+    {
+        cout << "链表的值："<<node->data<< endl;
+        node = node->next;
+    }
+}
+
 int main(){
     //初始化
     LinkList list;
     Status result = InitChainList(list);
     if(result==OK){
-        cout<<"初始化成功"<<endl;
+        cout<<"初始化成功,头节点地址："<< list <<endl;
     }
+
     ElemType e,e1,e2,e3,e4 ;
     e = 22;
     e1 = 23;
@@ -122,15 +181,22 @@ int main(){
     }
 
     LNode* search_node = SearchElem(list,e4);
-    cout<<"查询到的值："<<search_node;
+    cout<<"查询到的值："<<search_node<< endl;
 
-        // 释放链表节点
-    LNode* current = list->next;
-    while (current) {
-        LNode* nextNode = current->next;
-        delete current;
-        current = nextNode;
-    }
-    delete list;  // 释放头节点
+    DelList(list,-6);
 
+    search_node = SearchElem(list,e4);
+    cout<<"查询到的值："<<search_node<<endl;
+    // releaseList(list);
+
+    // 定义动态数组
+    vector<int> elemlist = {e,e1,e2,99,90};
+    Print(list);
+    CreatTailList(list,elemlist); 
+    Print(list);
+    releaseList(list);
+
+
+
+    system("pause");
 }
