@@ -15,7 +15,7 @@ typedef struct LNode
     /* data */
     ElemType data;
     struct LNode *next;
-}LNode,*LinkList;
+}LNode,LinkNode,*LinkList;
 
 
 //初始化
@@ -152,6 +152,54 @@ void Print(LinkList &L){
     }
 }
 
+
+void del_min(LinkList &L){
+    LinkNode *p = L->next,*pre = L,*minp,*minpre;
+    if(p == nullptr) return;
+    minp = p; //使用第一个数作为最小值
+    minpre = pre;
+    while (p!=nullptr)
+    {
+        if(p->data<minp->data){
+            minp = p;
+            minpre = pre;
+        }
+        pre = p;
+        p = p->next;
+    }
+    //del
+    minpre->next = minp->next;
+    delete minp;
+
+}
+
+void reverseRecursive(LinkNode* current,LinkNode* prev,LinkList &newHead){
+    if (current == nullptr) {
+        newHead = prev;
+        return;
+    }
+    LinkNode* next = current->next;
+    current->next = prev;
+    
+    reverseRecursive(next, current, newHead);
+
+}
+
+
+void reverse_head_insert(LinkList &L){
+    LinkNode *p,*r;
+    p = L->next;L->next = nullptr;
+    if(p == nullptr || p->next == nullptr) return;
+    while (p!=nullptr)
+    {
+        r = p->next;
+        p->next = L->next;
+        L->next = p;
+        p = r;
+    } 
+}
+
+
 int main(){
     //初始化
     LinkList list;
@@ -171,30 +219,35 @@ int main(){
     insertElem(list,e2,3);
     insertElem(list,e3,4);
     insertElem(list,e4,5);
+    Print(list);
+    reverse_head_insert(list);
+    cout<<"-----------"<<endl;
+    Print(list);
 
-    ElemType test;
-    Status result2 = GetElem(list,1,test);
-    if(result2==OK){
-        cout<< "取得的指是："<<test<<endl;
-    }else{
-        cout<< "取值失败"<<endl;
-    }
 
-    LNode* search_node = SearchElem(list,e4);
-    cout<<"查询到的值："<<search_node<< endl;
+    // ElemType test;
+    // Status result2 = GetElem(list,1,test);
+    // if(result2==OK){
+    //     cout<< "取得的指是："<<test<<endl;
+    // }else{
+    //     cout<< "取值失败"<<endl;
+    // }
 
-    DelList(list,-6);
+    // LNode* search_node = SearchElem(list,e4);
+    // cout<<"查询到的值："<<search_node<< endl;
 
-    search_node = SearchElem(list,e4);
-    cout<<"查询到的值："<<search_node<<endl;
+    // DelList(list,-6);
+
+    // search_node = SearchElem(list,e4);
+    // cout<<"查询到的值："<<search_node<<endl;
+    // // releaseList(list);
+
+    // // 定义动态数组
+    // vector<int> elemlist = {e,e1,e2,99,90};
+    // Print(list);
+    // CreatTailList(list,elemlist); 
+    // Print(list);
     // releaseList(list);
-
-    // 定义动态数组
-    vector<int> elemlist = {e,e1,e2,99,90};
-    Print(list);
-    CreatTailList(list,elemlist); 
-    Print(list);
-    releaseList(list);
 
 
 
