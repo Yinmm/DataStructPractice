@@ -36,6 +36,8 @@
                 "-g",
                 "${file}",
                 "-o",
+                "-Iadd",
+                "add/add.cpp",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {

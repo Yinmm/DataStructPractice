@@ -1,3 +1,4 @@
+#include<iostream> //输出流
 #include<string> 
 #include<iostream> //输出流
 #include<vector> // 动态创建数组
@@ -220,57 +221,214 @@ void sort(LinkList &L){
 }
 
  
+void del_value(LinkList &L,ElemType x,ElemType y){
+    LinkNode *p = L->next,*pre;
+    pre = L;
+    while (p!=nullptr)
+    {
+        if(p->data >x && p->data<y){
+            LinkNode *temp;
+            temp = p;
+            pre->next = p->next;
+            pre = p;
+            p = p->next;
+            delete temp;
+        }else{
+            pre = p;
+            p = p->next;
+        }
+    }
+    
+}
+
+void get_pub(LinkList &L1, LinkList &L2){
+    LinkNode *p1 = L1->next,*p2 = L2->next;
+    while(p1 != nullptr)
+    {
+        while (p2 != nullptr)
+        {
+            if(p1 == p2) {
+                cout<<p1<<endl;
+                return;
+            }else{
+                p2 = p2->next;
+            } 
+        }
+        p1 = p1->next;
+    } 
+}
+
+void get_pub2(LinkList &L1,LinkList &L2){
+    LinkNode *p1=L1->next,*p2=L2->next;
+    int L1_len=0,L2_len=0; //获取链表长度
+    while(p1 !=nullptr){
+        p1 = p1->next;
+        L1_len++;
+    }
+    while (p2 !=nullptr)
+    {
+        p2 = p2->next;
+        L2_len++;
+    }
+    int d_value;
+
+    p1=L1->next; // 重新指向链表首部
+    p2=L2->next; // 重新指向链表首部
+    d_value = L1_len>L2_len?L1_len-L2_len:L2_len-L1_len; //求长度差值
+    if(L1_len>L2_len){
+        for(int i=0;i<d_value;i++){
+            p1 = p1->next;
+        }
+    }else{
+        for(int i=0;i<d_value;i++){
+            p2 = p2->next;
+        }
+    }
+
+    while (p1 !=nullptr)
+    {
+        if(p1 == p2){
+            cout<<p1<<endl; //打印出第一个结点，后续所有结点都是公共结点
+            return;
+        }else{
+            p1 = p1->next;
+            p2 = p2->next;
+        }
+    }
+}
+
+
+void sort_realese(LinkList &L){
+    LinkNode *p = L->next,*pre,*minpre,*r;
+    while (p !=nullptr)
+    {
+        minpre = pre = L;
+        LinkNode *min;
+        min = p;
+        r = p->next;
+        if(r!=nullptr) pre = p;//后驱结点存在，pre指到r的前结点p
+        while (r!=nullptr)
+        {
+            if(r->data<min->data){
+                min = r;
+                minpre=pre;
+                pre = r;
+                r=r->next;
+            }else{
+                pre = r;
+                r = r->next;
+            }
+        }
+        cout<<min->data<<endl;
+        minpre->next = min->next;
+        delete min;
+        p = L->next; //重新让P指向第一个结点
+    }
+}
+void min_Delete(LinkList &L){
+    while (L->next != nullptr) //循环到仅剩头结点
+    {
+        LinkNode *pre = L;
+        LinkNode *p = pre->next;
+        LinkNode *u;//指向被删除节点
+        while (p->next !=nullptr)
+        {
+            if(p->next->data<pre->next->data){
+                pre = p; //当前最小值的前驱
+            }
+            p = p->next;
+        }
+        cout<<pre->next->data<<endl;
+        u = pre->next;
+        pre->next = u->next;
+        delete u;
+        
+    }
+    delete L;//释放头结点
+    
+}
+
+void del_duplicate(LinkList &L){
+    LinkNode *p = L->next,*del;
+    while(p->next != nullptr){
+        if(p->data == p->next->data){
+            del = p->next;
+            p->next = del->next;
+            delete del;
+        }else{
+            p = p->next;
+        }
+    }
+}
+
+void merge(LinkList &A,LinkList &B){
+    LinkNode *p1 = A->next,*p2 =B->next,*q;
+    A->next = nullptr; //将A表头结点作为新表的头结点
+    while (p1 != nullptr && p2 !=nullptr)
+    {
+        if(p1->data < p2->data){
+            q = p1->next;
+            p1->next = A->next;
+            A->next = p1;
+            p1 = q;
+        }else{
+            q = p2->next;
+            p2->next = A->next;
+            A->next = p2;
+            p2 = q;
+        }
+    }
+    //处理剩余结点{
+    while(p1 !=nullptr){
+            q = p1->next;
+            p1->next = A->next;
+            A->next = p1;
+            p1 = q;
+    }
+    while (p2 !=nullptr)
+    {
+            q = p2->next;
+            p2->next = A->next;
+            A->next = p2;
+            p2 = q;
+    }
+}
+
 
 int main(){
     //初始化
-    LinkList list;
+    LinkList list,list2;
     Status result = InitChainList(list);
+    InitChainList(list2);
     if(result==OK){
         cout<<"初始化成功,头节点地址："<< list <<endl;
     }
 
-    ElemType e,e1,e2,e3,e4 ;
-    e = 22;
-    e1 = 23;
-    e2 = 19;
-    e3 = 70;
-    e4 = 26;
+    ElemType e,e1,e2,e3,e4,e5,e6,e7,e8,e9 ;
+    e = 12;
+    e1 = 15;
+    e2 = 18;
+    e3 = 19;
+    e4 = 33;
+    e5 = 2;
+    e6 = 13;
+    e7 = 14;
+    e8 = 19;
+    e9 = 35;
     insertElem(list,e,1);
     insertElem(list,e1,2);
     insertElem(list,e2,3);
     insertElem(list,e3,4);
     insertElem(list,e4,5);
+    insertElem(list2,e5,1);
+    insertElem(list2,e6,2);
+    insertElem(list2,e7,3);
+    insertElem(list2,e8,4);
+    insertElem(list2,e9,5);
     Print(list);
-    sort(list);
+    merge(list,list2);
     cout<<"-----------"<<endl;
     Print(list);
-
-
-    // ElemType test;
-    // Status result2 = GetElem(list,1,test);
-    // if(result2==OK){
-    //     cout<< "取得的指是："<<test<<endl;
-    // }else{
-    //     cout<< "取值失败"<<endl;
-    // }
-
-    // LNode* search_node = SearchElem(list,e4);
-    // cout<<"查询到的值："<<search_node<< endl;
-
-    // DelList(list,-6);
-
-    // search_node = SearchElem(list,e4);
-    // cout<<"查询到的值："<<search_node<<endl;
-    // // releaseList(list);
-
-    // // 定义动态数组
-    // vector<int> elemlist = {e,e1,e2,99,90};
-    // Print(list);
-    // CreatTailList(list,elemlist); 
-    // Print(list);
-    // releaseList(list);
-
-
 
     system("pause");
 }
